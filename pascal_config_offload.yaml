@@ -6,7 +6,7 @@ RSBench:
     build_dir: 'RSBench'
     build: {
         omp-offload-clang: [ 'cd openmp-offload; make COMPILER=clang
-            CFLAGS="-v -Ofast -fopenmp -fopenmp-targets=nvptx64-nvidia-cuda -Xopenmp-target -march=sm_70 -fsave-optimization-record -save-stats";
+            CFLAGS="-v -Ofast -fopenmp -fopenmp-targets=nvptx64-nvidia-cuda -Xopenmp-target -march=sm_60 -fsave-optimization-record -save-stats";
             cp rsbench ../' ]
     }
     copy: [ 'rsbench' ]
