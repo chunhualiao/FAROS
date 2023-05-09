@@ -451,7 +451,7 @@ CoSP2:
     clean: [ 'cd src-mpi; make -j clean' ]
 
 b+tree:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz2;
             cd rodinia_3.1 && patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/b+tree.patch'
     tags: ['rodinia']
@@ -470,7 +470,7 @@ b+tree:
     clean: [ 'make -j clean' ]
 
 backprop:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz2;
              cd rodinia_3.1 &&  patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/backprop.patch'
     tags: ['rodinia']
@@ -490,7 +490,7 @@ backprop:
     clean: [ 'make -j clean' ]
 
 bfs:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz2;
             cd rodinia_3.1 && patch -N -r - -p1 < ../../patches/rodinia_3.1/openmp/bfs.patch'
     tags: ['rodinia']
@@ -510,7 +510,7 @@ bfs:
     clean: [ 'make -j clean' ]
 
 cfd:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz2;
             cd rodinia_3.1 && patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/cfd.patch'
     tags: ['rodinia']
@@ -531,7 +531,7 @@ cfd:
     clean: [ 'make -j clean' ]
 
 heartwall:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz2;
             cd rodinia_3.1 && patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/heartwall.patch'
     tags: ['rodinia']
@@ -552,7 +552,7 @@ heartwall:
     clean: [ 'make -j clean' ]
 
 hotspot:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz;
             cd rodinia_3.1 && patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/hotspot.patch'
     tags: ['rodinia']
@@ -573,7 +573,7 @@ hotspot:
     clean: [ 'make -j clean' ]
 
 hotspot3D:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz2;
             cd rodinia_3.1 && patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/hotspot3D.patch'
     tags: ['rodinia']
@@ -594,7 +594,7 @@ hotspot3D:
     clean: [ 'make -j clean' ]
 
 kmeans:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz;
             cd rodinia_3.1 && patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/kmeans.patch'
     tags: ['rodinia']
@@ -615,7 +615,7 @@ kmeans:
     clean: [ 'make -j clean' ]
 
 lavaMD:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz2;
             cd rodinia_3.1 && patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/lavaMD.patch'
     tags: ['rodinia']
@@ -635,7 +635,7 @@ lavaMD:
 
 
 leukocyte:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz2;
             cd rodinia_3.1 && patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/leukocyte.patch'
     tags: ['rodinia']
@@ -655,7 +655,7 @@ leukocyte:
     clean: [ 'make -j clean' ]
 
 lud:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz2;
             cd rodinia_3.1 && patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/lud.patch'
     tags: ['rodinia']
@@ -677,7 +677,7 @@ lud:
     clean: [ 'make -j clean' ]
 
 nn:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz2;
             cd rodinia_3.1 && patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/nn.patch'
     tags: ['rodinia']
@@ -701,7 +701,7 @@ nn:
     clean: [ 'make -j clean' ]
 
 nw:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz2;
             cd rodinia_3.1 && patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/nw.patch'
     tags: ['rodinia']
@@ -721,7 +721,7 @@ nw:
     clean: [ 'make -j clean' ]
 
 particlefilter:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz2;
             cd rodinia_3.1 && patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/particlefilter.patch'
     tags: ['rodinia']
@@ -743,7 +743,7 @@ particlefilter:
     clean: [ 'make -j clean' ]
 
 pathfinder:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz2;
             cd rodinia_3.1 && patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/pathfinder.patch'
     tags: ['rodinia']
@@ -763,7 +763,7 @@ pathfinder:
     clean: [ 'make -j clean' ]
 
 srad:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz2;
             cd rodinia_3.1 && patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/srad.patch'
     tags: ['rodinia']
@@ -783,7 +783,7 @@ srad:
     clean: [ 'make -j clean' ]
 
 streamcluster:
-    fetch: 'wget -nc http://www.cs.virginia.edu/~kw5na/lava/Rodinia/Packages/Current/rodinia_3.1.tar.bz2;
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
             [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz2;
             cd rodinia_3.1 && patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/streamcluster.patch'
     tags: ['rodinia']

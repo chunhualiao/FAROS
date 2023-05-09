@@ -22,8 +22,15 @@ described in that configuration. You can see below the help
 output describing possible options. The configuration file input is set
 with the `-i, --input` argument. There are three different actions the
 harness performs:
+
 1. fetch sources, with the option `-f, --fetch`,
 fetches the program sources from the specified repositories;
+
+For example, to fetch source files of SRAD of the Rodinia benchmark suite:
+```
+python faros-config.py -i config.yaml -f -p srad
+```
+
 2. build programs, with
 the option `-b, --build`, builds the selected program using the specified
 compilation options in the configuration, also fetching if needed;

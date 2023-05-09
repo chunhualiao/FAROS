@@ -15,6 +15,8 @@
 import argparse
 import yaml
 
+from yaml import CLoader
+
 from libs.faros import faroslib as faros
 
 
