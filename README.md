@@ -9,14 +9,14 @@ their native build configurations.
 
 This repo contains a benchmark harness to fetch, build, and run programs
 with different compilation options for analyzing the impact of
-compilation on performance. The usecase is contrasting OpenMP compilation
+compilation on performance. The use case is contrasting OpenMP compilation
 with its serial elision to understand performance differences due to
-different compilation.
+different compilations.
 
 
 ### Harness script
 
-The harness script in python, named benchmark.py, takes as input a YAML
+The harness script in Python, named benchmark.py, takes as input a YAML
 configuration file and a set of options to build and run programs
 described in that configuration. You can see below the help
 output describing possible options. The configuration file input is set
@@ -42,13 +42,13 @@ sources of an application to a single file;
 runs the executable with the specified input, repeating up to the number
 of repetitions set. In our IWOMP paper, we used 30 repetitions for each program.
 
-The flags can be individually set doing multiple runs of the harness, or
+The flags can be individually set by doing multiple runs of the harness, or
 combined to perform multiple actions in a single run -- fetching takes
-precedence over building, building over generating reports and running.
-The user select the list of programs to operate usin `-p,--programs`
+precedence over building, building over generating reports, and running.
+The user selects the list of programs to operate using `-p,--programs`
 followed by individual program names or the keyword `all` for all the
 programs specified in the configuration input.  Alternatively, the user
-may select the list of programs by provide a tag list with `-t,--tags`
+may select the list of programs by providing a tag list with `-t,--tags`
 that matches tags for each program specified in the configuration.
 Also, the harness has a dry run option, `-d,--dry-run`, that prints what
 actions would be performed without actually performing them.
@@ -79,7 +79,7 @@ operation when building and running:
     specified in the configuration;
 2. the directory `bin` to store the generated executable from
     building to run them;
-3. the directory `reports`, where it store compilation
+3. the directory `reports`, which stores compilation
     reports, including optimization remarks;
 4. the directory `results` to store profiling results, which
     contain execution times from running different built configurations and
@@ -87,10 +87,10 @@ operation when building and running:
 
 ### YAML configuration input
 
-Configuring YAML creates is a hierarchy of keys for each program to
+Configuring YAML creates a hierarchy of keys for each program to
 include that prescribe actions for the harness script. We describe those
 keys here. For a working example please see `config.yaml` in the repo,
-which iincludes configuration for 39 HPC programs including proxy/mini
+which includes configuration for 39 HPC programs including proxy/mini
 applications, NAS and Rodinia kernels, and the open-source large
 application GROMACS.  The root of the hierarchy is a user-chosen,
 descriptive name per program configuration.  The harness creates a
@@ -98,9 +98,9 @@ sub-directory matching the name of this root key under `bin` to store
 executables
 
 The key `fetch` contains the shell command to fetch the
-application code, for example cloning from a GitHub repo. Note that the
-fetching command can include also a patching file, if needed, provided
-by the user. In this repo we provide patch files for programs in
+application code, for example, cloning from a GitHub repo. Note that the
+fetching command can include also a patching file if needed, provided
+by the user. In this repo, we provide patch files for programs in
 `config.yaml` undr the directory `patches`.  For example, for some
 programs, we apply a patch to guard calls to OpenMP runtime functions
 using the standard approach of enabling those calls within `#ifdef OPENMP
@@ -114,11 +114,11 @@ harness changes to this directory to execute the build commands
 specified under the key build. There is a different sub-key for each
 different compilation specification, denoted by a user-provided
 identifier.  The harness creates different sub-directories under
-`bin/<program>`for each different compilation configurations
+`bin/<program>`for each different compilation configuration.
 
 The key `copy` specifies a list of files or directories that the harness
 copies out to those sub-directories. The list contains the executable
-file and possibly any input files needed for executing, if the user
+file and possibly any input files needed for execution, if the user
 desires to have self-contained execution in `bin` by avoiding referring to
 input files in the directory repos -- this is useful for
 relocating the directory bins without needing to copy over
@@ -132,14 +132,14 @@ Moreover, the key `input` specifies the input arguments
 for the application in the run command.
 
 The key `measure`
-specifies a regular expression to match in the application's executable
+specifies a regular expression to match the application's executable
 output to capture the desired measure of performance, such as execution
 time or some other Figure of Merit (FoM). If the value of the key
 measure is empty, the harness measures end-to-end, wall clock  execution
 time from launching the application to its end, using python's
 time module.
 
-Lastly, the key `clean` specifies the commands that harness executes to
+Lastly, the key `clean` specifies the commands the harness executes to
 clean the repo for building a different compilation configuration.
 
 ## An Example Session
@@ -160,10 +160,38 @@ There are three main remark types:
 - Missed: Remarks that describe an attempt to an optimization by the compiler that could not be performed.
 - Analysis: Remarks that describe the result of an analysis, that can bring more information to the user regarding the generated code.
 
-To do comparative performance analysis of sequential vs OpenMP versions, the Passed and Analysis Remarks are particularly useful to investigate the differences among enabled optimizations of two versions and why. 
+To do a comparative performance analysis of sequential vs OpenMP versions, the Passed and Analysis Remarks are particularly useful to investigate the differences among enabled optimizations of two versions and why. 
 
-Now, let's see the example session
+Now, let's see the example session. 
 
+First, view and edit config.yaml to prepare programs supported. 
+Some programs may have stale URL links so you may want to update them. 
+The compiler used may also have new flags needed. 
+
+For example, srad has the following configuration settings:
+```
+srad:
+    fetch: 'wget -nc http://www.cs.virginia.edu/~skadron/lava/Rodinia/Packages/rodinia_3.1.tar.bz2;
+            [ ! -d "./rodinia_3.1" ] && tar xfk rodinia_3.1.tar.bz2;
+            cd rodinia_3.1 && patch -N -r /dev/null -p1 < ../../patches/rodinia_3.1/openmp/srad.patch'
+    tags: ['rodinia']
+    build_dir: 'rodinia_3.1/openmp/srad/srad_v2'
+    build: {
+        seq: [ 'make -j CC="clang++"
+                CC_FLAGS="-g -O3 -march=native -fsave-optimization-record -save-stats"'],
+        omp: [ 'make -j CC="clang++"
+                CC_FLAGS="-DOPEN -fopenmp -g -O3 -march=native -fsave-optimization-record -save-stats -fopenmp"
+                '],
+    }
+    copy: [ 'srad' ]
+    bin: 'srad'
+    run: 'env OMP_NUM_THREADS=1 OMP_PROC_BIND=true ./srad'
+    input: '2048 2048 0 127 0 127 1 0.5 100'
+    measure: ''
+    clean: [ 'make -j clean' ]
+```
+
+If things look good. Do the following
 ```
 # Fetch if needed, then build the srad program
  python faros-config.py -i config.yaml -b -p srad
@@ -191,9 +219,9 @@ omp :    9.702 s, slowdown/seq:    2.231
 
 There are two folders storing useful information for performance investigation
 * results: this folder stores the performance measurements of the benchmark into .yaml files
-* reports: this folder stores compiler remarks of two versions and their differences in html format 
+* reports: this folder stores compiler remarks of two versions and their differences in HTML format 
 
-For example , results/results-srad.yaml may have the following content:
+For example, results/results-srad.yaml may have the following content:
 ```
 srad:
   omp:
@@ -222,7 +250,7 @@ srad:
 ```
 
 Seeing the big difference (slowing down of the OpenMP version compared to the sequential version),
-the next step is to investigate the diff information of two versions for compiler remarks for Passed optimizations. 
+the next step is to investigate the diff information of the two versions for compiler remarks for Passed optimizations. 
 
 Within reports/srad/html-seq-omp-passed, there are
 * index.html  : index of all compiler remarks for passed optimizations
@@ -285,7 +313,7 @@ The compiler analysis remark difference shows that for the omp version,
 Now we know that the LLVM compiler cannot vectorize the loop in question since it cannot
 identify array bounds when it compiles the loop in OpenMP mode. 
 
-We can now analyze the code and try different options to enable the vectorization in the OpenMP mode. 
+We can now analyze the code and try different options to enable vectorization in the OpenMP mode. 
 
 
 ## Contributing
