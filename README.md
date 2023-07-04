@@ -40,7 +40,7 @@ configurations, creating remark diff files between them, from all the
 sources of an application to a single file;
 4. run tests, with the option `-r,--run` and a following argument on how many repetitions to perform, that
 runs the executable with the specified input, repeating up to the number
-of repetitions set.
+of repetitions set. In our IWOMP paper, we used 30 repetitions for each program.
 
 The flags can be individually set doing multiple runs of the harness, or
 combined to perform multiple actions in a single run -- fetching takes

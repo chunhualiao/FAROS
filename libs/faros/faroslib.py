@@ -145,7 +145,8 @@ def run(run_cmd, run_input, build_list, bin_output, metric_regex, program, reps,
 def show_stats(build_list, program):
     try:
         with open('./results/results-%s.yaml' % (program), 'r') as f:
-            results = yaml.load(f, Loader=CLoader)
+#            results = yaml.load(f, Loader=CLoader)  # this requires libymal C lib installation
+            results = yaml.load(f, Loader=yaml.SafeLoader)
     except FileNotFoundError as e:
         print('ERROR', e, 'abort showing stats')
         return
