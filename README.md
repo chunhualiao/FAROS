@@ -315,6 +315,36 @@ identify array bounds when it compiles the loop in OpenMP mode.
 
 We can now analyze the code and try different options to enable vectorization in the OpenMP mode. 
 
+## Known Issues
+
+Some benchmarks are not written to support both sequential and OpenMP compilation modes. 
+You may need to change the code slightly to enable the sequential compilation. 
+
+For example, you can guard the call to an OpenMP runtime function with a #ifdef _OPENMP preprocessing directive. 
+
+```
+#include <stdio.h>
+
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
+int main() {
+    // other code...
+
+#ifdef _OPENMP
+        #pragma omp master
+        printf("%d threads running\n", omp_get_num_threads());
+#else
+        printf("Sequential execution\n");
+#endif
+
+    // other code...
+
+    return 0;
+}
+
+```
 
 ## Contributing
 To contribute to this repo please send a [pull
