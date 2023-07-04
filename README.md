@@ -232,6 +232,17 @@ Opening srad.cpp.html, we should focus on OpenMP annotated regions to find compi
 
 The relevant loop is the following:
 ```
+127			
+#ifdef OPEN
+128			
+		omp_set_num_threads(nthreads);
+129			
+		#pragma omp parallel for shared(J, dN, dS, dW, dE, c, rows, cols, iN, iS, jW, jE) private(i, j, k, Jc, G2, L, num, den, qsqr)
++asm-printer	181 instructions in function 	.omp_outlined.
++prologepilog	104 stack bytes in function 	.omp_outlined.
+130			
+#endif
+
 131			
 		for (int i = 0 ; i < rows ; i++) {
 -loop-delete	   Loop deleted because it is invariant 	main
