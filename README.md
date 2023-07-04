@@ -142,6 +142,141 @@ time module.
 Lastly, the key `clean` specifies the commands that harness executes to
 clean the repo for building a different compilation configuration.
 
+## An Example Session
+
+We will use the SRAD benchmark from Rodinia as an example to show how to use FAROS, including
+- how to fetch and build the benchmark
+- how to generate performance measurements of two versions (sequential vs. OpenMP single thread) and their corresponding compiler remarks. 
+- how to look into results
+
+Before we dive into the example, we need to understand the background of LLVM remarks
+https://llvm.org/docs/Remarks.html
+
+
+LLVM is able to emit diagnostics from passes describing whether an optimization has been performed or missed for a particular reason, which should give more insight to users about what the compiler did during the compilation pipeline.
+
+There are three main remark types:
+- Passed: Remarks that describe a successful optimization performed by the compiler.
+- Missed: Remarks that describe an attempt to an optimization by the compiler that could not be performed.
+- Analysis: Remarks that describe the result of an analysis, that can bring more information to the user regarding the generated code.
+
+To do comparative performance analysis of sequential vs OpenMP versions, the Passed and Analysis Remarks are particularly useful to investigate the differences among enabled optimizations of two versions and why. 
+
+Now, let's see the example session
+
+```
+# Fetch if needed, then build the srad program
+ python faros-config.py -i config.yaml -b -p srad
+
+# Run the program 10 times
+ python faros-config.py -i config.yaml -r 10  -p srad
+
+# Generate compiler optimization remarks
+ python faros-config.py -i config.yaml -g  -p srad
+
+# Show statistics
+
+ python faros-config.py -i config.yaml -s  -p srad
+# apps:  38  selected  ['srad']
+=======
+srad # runs {'seq': 10, 'omp': 10} 
+
+# Results
+
+## Ranked by speed
+seq :    4.349 s, slowdown/seq:    1.000
+omp :    9.702 s, slowdown/seq:    2.231
+=======
+```
+
+There are two folders storing useful information for performance investigation
+* results: this folder stores the performance measurements of the benchmark into .yaml files
+* reports: this folder stores compiler remarks of two versions and their differences in html format 
+
+For example , results/results-srad.yaml may have the following content:
+```
+srad:
+  omp:
+  - 9.652787942439318
+  - 9.73018952831626
+  - 9.641681296750903
+  - 9.761115090921521
+  - 9.619307561777532
+  - 9.583568077534437
+  - 9.738149240612984
+  - 9.75324924569577
+  - 9.636020811274648
+  - 9.904356695711613
+  seq:
+  - 4.374754965305328
+  - 4.363104037940502
+  - 4.353898557834327
+  - 4.349130207672715
+  - 4.332207940518856
+  - 4.338168643414974
+  - 4.344235148280859
+  - 4.3434492610394955
+  - 4.338591802865267
+  - 4.3562699453905225
+
+```
+
+Seeing the big difference (slowing down of the OpenMP version compared to the sequential version),
+the next step is to investigate the diff information of two versions for compiler remarks for Passed optimizations. 
+
+Within reports/srad/html-seq-omp-passed, there are
+* index.html  : index of all compiler remarks for passed optimizations
+* srad.cpp.html  : each source file has annotated remarks
+
+Opening srad.cpp.html, we should focus on OpenMP annotated regions to find compiler remarks. 
+
+The relevant loop is the following:
+```
+131			
+		for (int i = 0 ; i < rows ; i++) {
+-loop-delete	   Loop deleted because it is invariant 	main
+-licm	                		    hoisting and 	main
+-licm	                		    hoisting icmp 	main
+132			
+            for (int j = 0; j < cols; j++) { 
+-licm	             hoisting and 	main
+-licm	                               hoisting and 	main
+-licm	             hoisting shufflevector 	main
+-loop-vectorize	             vectorized loop (vectorization width: 8, interleaved count: 1) 	main
+-licm	             hoisting insertelement 	main
+-licm	             hoisting sub 	main
++licm	                               hoisting zext 	.omp_outlined._debug__
+-licm	             hoisting icmp 	main
++licm	                                 hoisting load 
+
+```
+
+The loop at line 132 does not have loop-vectorize enabled compared to its sequential counterpart. 
+So it has the remark of "-loop-vectorze         vectorized loop (vectorization width: 8, interleaved count: 1) 	main". 
+
+To understand the Passed remark more, we should investigate the compiler's Analysis Remark for the same loop. 
+
+Open reports/srad/html-seq-omp-analysis/srad.cpp.html
+
+We can see the following content:
+```
+131			
+		for (int i = 0 ; i < rows ; i++) {
+132			
+            for (int j = 0; j < cols; j++) { 
+-loop-vectorize	             the cost-model indicates that interleaving is not beneficial 	main
++loop-vectorize	             loop not vectorized: cannot identify array bounds 
+```
+
+The compiler analysis remark difference shows that for the omp version, 
+"loop not vectorized: cannot identify array bounds ". 
+
+Now we know that the LLVM compiler cannot vectorize the loop in question since it cannot
+identify array bounds when it compiles the loop in OpenMP mode. 
+
+We can now analyze the code and try different options to enable the vectorization in the OpenMP mode. 
+
+
 ## Contributing
 To contribute to this repo please send a [pull
 request](https://help.github.com/articles/using-pull-requests/) on the
